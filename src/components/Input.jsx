@@ -1,8 +1,63 @@
-export default function Input() {
+import { useState, useEffect } from "react";
+
+// 1) получить данные ол пользователя(input)
+// 2) запрос к серверу
+// 3) отправка запроса
+
+export default function Todo() {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+
+  const SubmittingTasks = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("https://easydev.club/api/v1/todos", {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          isDone: true,
+          title: inputValue,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`Ошибка: ${response.status}`);
+      }
+      const resData = await response.json();
+      setData(resData);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+
+    SubmittingTasks();
+    console.log("задача полетела");
+  }, []);
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  if (isLoading) {
+    return <div>Идет загрузка...</div>;
+  }
+  if (error) {
+    return <div>Ошибка: {error.message}</div>;
+  }
+
   return (
     <div>
-      <input type="text" />
-      <button>Добавить</button>
+      <input type="text" value={inputValue} onChange={handleInputChange} />
+      <button type="submit" onClick={SubmittingTasks}>
+        Отправить
+      </button>
     </div>
   );
 }
