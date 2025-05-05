@@ -5,7 +5,7 @@ function App() {
     <main>
       <FullVue />
     </main>
-  );
+  ); 
 }
 
 export default App;
