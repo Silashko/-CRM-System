@@ -1,11 +1,11 @@
-import FullVue from "./components/FullVue.jsx";
+import Todo from "./components/Todo.jsx";
 
 function App() {
   return (
     <main>
-      <FullVue />
+      <Todo />
     </main>
-  ); 
+  );
 }
 
 export default App;
